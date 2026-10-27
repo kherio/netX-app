@@ -305,7 +305,7 @@ fun SettingsScreen(vm: MainViewModel, onSaved: () -> Unit) {
                 vm.testConnection(url, token) { status = it }
             }) { Text("Probar conexión") }
             Button(onClick = {
-                val changed = url.trim().trimEnd('/') != p.baseUrl || token.trim() != p.token
+                val changed = normalizeUrl(url) != p.baseUrl || token.trim() != p.token
                 p.baseUrl = url
                 p.token = token
                 p.notifyNew = notifyNew

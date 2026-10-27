@@ -7,7 +7,7 @@ class Prefs(ctx: Context) {
 
     var baseUrl: String
         get() = sp.getString("url", "") ?: ""
-        set(v) = sp.edit().putString("url", v.trim().trimEnd('/')).apply()
+        set(v) = sp.edit().putString("url", normalizeUrl(v)).apply()
 
     var token: String
         get() = sp.getString("token", "") ?: ""

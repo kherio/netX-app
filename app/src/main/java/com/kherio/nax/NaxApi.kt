@@ -8,13 +8,29 @@ import java.net.URL
 
 class ApiException(message: String) : Exception(message)
 
+/** Quita espacios y barras finales; si falta el esquema, asume https://. */
+fun normalizeUrl(raw: String): String {
+    val t = raw.trim().trimEnd('/')
+    return if (t.isNotEmpty() && !t.contains("://")) "https://$t" else t
+}
+
+/** Texto legible para errores de red. */
+fun networkMessage(e: IOException): String {
+    val m = e.message ?: "error de red"
+    return if (m.contains("Cleartext", ignoreCase = true)) {
+        "La URL usa http:// y Android lo bloquea. Usa https://"
+    } else {
+        "No se pudo conectar: $m"
+    }
+}
+
 /**
  * Cliente mínimo de la API REST de NetAlertX (solo lectura).
  * Autenticación: cabecera "Authorization: Bearer <API_TOKEN>".
  */
 class NaxApi(baseUrl: String, private val token: String) {
 
-    private val base = baseUrl.trim().trimEnd('/')
+    private val base = normalizeUrl(baseUrl)
 
     private fun get(path: String): String {
         val conn = try {

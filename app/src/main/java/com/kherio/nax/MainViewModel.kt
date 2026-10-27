@@ -54,7 +54,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: ApiException) {
                 error = e.message
             } catch (e: IOException) {
-                error = "No se pudo conectar: ${e.message ?: "error de red"}"
+                error = networkMessage(e)
             } catch (e: Exception) {
                 error = "Respuesta inesperada del servidor: ${e.message}"
             } finally {
@@ -72,7 +72,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: ApiException) {
                 e.message ?: "Error de la API"
             } catch (e: IOException) {
-                "No se pudo conectar: ${e.message ?: "error de red"}"
+                networkMessage(e)
             } catch (e: Exception) {
                 "Respuesta inesperada: ${e.message}"
             }
